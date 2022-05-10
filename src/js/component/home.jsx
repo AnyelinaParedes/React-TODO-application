@@ -1,26 +1,39 @@
 import React from "react";
+import TodoForm from "./todoform.jsx";
+import { useState } from "react";
+import TodoItem from "./todoitem.jsx";
+function Home() {
+	const [todos, setTodos] = useState([]);
+	const addTodo = (text) => {
+		let id = 1;
+		if (todos.length > 0) {
+			id = todos[0].id + 1;
+		}
+		let todo = { id: id, text: text, completed: false };
+		let newTodos = [todo, ...todos];
+		console.log(newTodos);
+		setTodos(newTodos);
+	};
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
-const Home = () => {
+	const removeTodo = (id) => {
+		let updatedTodos = [...todos].filter((todo) => todo.id !== id);
+		setTodos(updatedTodos);
+	};
 	return (
-		<div>
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<div className="todo-app">
+			<h1>Todo List</h1>
+			<TodoForm addTodo={addTodo} />
+			{todos.map((todo) => {
+				return (
+					<TodoItem
+						removeTodo={removeTodo}
+						todo={todo}
+						key={todo.id}
+					/>
+				);
+			})}
 		</div>
 	);
-};
+}
 
 export default Home;
